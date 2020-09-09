@@ -44,6 +44,7 @@ nmvec <- c(4.2, 6.7, 5.4, 34.6, 87)
 invec <- c(4, 5, 6, 7, 8)
 # factor vector
 fcvec <- factor(c("North", "Carnegie", "Milbank", "Minor", "Eels"))
+fcvec
 
 # site names
 levels(datW$NAME)
@@ -82,8 +83,96 @@ hist(datW$TAVE[datW$siteN == 2],
      col = "grey75",
      border = "white")
 curve(dnorm(x,
-      mean = mean(datW$TAVE[datW$siteN == 2], na.rm = TRUE),
-      sd = sd(datW$TAVE[datW$siteN == 2], na.rm = TRUE)),
+      mean(datW$TAVE[datW$siteN == 2], na.rm = TRUE),
+      sd(datW$TAVE[datW$siteN == 2], na.rm = TRUE)),
       add = TRUE, col = "red")
 
+# get info on normal distribution related functions
+help(dnorm)
+# pnorm is specified value and BELOW
+# pnorm below freezing temps at Aberdeen
+pnorm(0,
+      mean(datW$TAVE[datW$siteN == 1], na.rm = TRUE),
+      sd(datW$TAVE[datW$siteN == 1], na.rm = TRUE))
+# pnorm below 5 degrees
+pnorm(5,
+      mean(datW$TAVE[datW$siteN == 1], na.rm = TRUE),
+      sd(datW$TAVE[datW$siteN == 1], na.rm = TRUE))
+# pnorm between 0-5 degrees
+pnorm(5,
+      mean(datW$TAVE[datW$siteN == 1], na.rm = TRUE),
+      sd(datW$TAVE[datW$siteN == 1], na.rm = TRUE)) - pnorm(0,
+      mean(datW$TAVE[datW$siteN == 1], na.rm = TRUE),
+      sd(datW$TAVE[datW$siteN == 1], na.rm = TRUE))
+# pnorm above 20 = 1 - pnorm below 20
+1 - pnorm(20,
+          mean(datW$TAVE[datW$siteN == 1], na.rm = TRUE),
+          sd(datW$TAVE[datW$siteN == 1], na.rm = TRUE))
+# qnorm is value at which that and below occur at specified probability
+# qnorm 95%, unusual high temps start at output value
+highthresh <- qnorm(0.95,
+      mean(datW$TAVE[datW$siteN == 1], na.rm = TRUE),
+      sd(datW$TAVE[datW$siteN == 1], na.rm = TRUE))
+highthresh
 
+# Q5 - increase mean temp by 4 in Aberdeen, stddev constant, probability of temps above current high threshold
+1 - pnorm(highthresh,
+          4 + mean(datW$TAVE[datW$siteN == 1], na.rm = TRUE),
+          sd(datW$TAVE[datW$siteN == 1], na.rm = TRUE))
+
+# Q6 - histogram of daily precip in Aberdeen
+hist(datW$PRCP[datW$siteN == 1],
+     freq = FALSE,
+     main = paste(levels(datW$NAME)[1]),
+     xlab = "Daily precipitation (mm)",
+     ylab = "Relative frequency",
+     col = "darkblue",
+     border = "black")
+
+# Q7 - total annual precip for each year and site
+PRCPAN <- aggregate(datW$PRCP, by=list(datW$NAME, datW$year), FUN="sum", na.rm=TRUE)
+PRCPAN
+# rename columns
+colnames(PRCPAN) <- c("NAME", "YEAR", "ANPRCP")
+PRCPAN
+# reassign site names as factor
+PRCPAN$NAME <- as.factor(PRCPAN$NAME)
+levels(PRCPAN$NAME)
+# convert level to number for factor
+PRCPAN$siteN <- as.numeric(PRCPAN$NAME)
+
+# Q8 - histogram of annual precip for Aberdeen and Mandan Station
+# Aberdeen
+hist(PRCPAN$ANPRCP[PRCPAN$siteN == 1],
+     freq = FALSE,
+     main = paste(levels(PRCPAN$NAME)[1]),
+     xlab = "Annual precipitation (mm)",
+     ylab = "Relative Frequency",
+     col = "purple",
+     border = "black")
+curve(dnorm(x,
+            mean(PRCPAN$ANPRCP[PRCPAN$siteN == 1], na.rm = TRUE),
+            sd(PRCPAN$ANPRCP[PRCPAN$siteN == 1], na.rm = TRUE)),
+      add = TRUE, col = "black")
+# Mandan Station
+hist(PRCPAN$ANPRCP[PRCPAN$siteN == 3],
+     freq = FALSE,
+     main = paste(levels(PRCPAN$NAME)[3]),
+     xlab = "Annual precipitation (mm)",
+     ylab = "Relative Frequency",
+     col = "orange",
+     border = "white")
+curve(dnorm(x,
+            mean(PRCPAN$ANPRCP[PRCPAN$siteN == 3], na.rm = TRUE),
+            sd(PRCPAN$ANPRCP[PRCPAN$siteN == 3], na.rm = TRUE)),
+      add = TRUE, col = "blue")
+
+# Q9 - how likely is a year w/ 700 mm or less precip?
+# Aberdeen
+pnorm(700,
+      mean(PRCPAN$ANPRCP[PRCPAN$siteN == 1], na.rm = TRUE),
+      sd(PRCPAN$ANPRCP[PRCPAN$siteN == 1], na.rm = TRUE))
+# Mandan Station
+pnorm(700,
+      mean(PRCPAN$ANPRCP[PRCPAN$siteN == 3], na.rm = TRUE),
+      sd(PRCPAN$ANPRCP[PRCPAN$siteN == 3], na.rm = TRUE))
