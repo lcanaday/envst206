@@ -73,5 +73,17 @@ hist(datW$TAVE[datW$siteN == 1],
 # look up hist funtion arguments
 help(hist)
 
+# Q4 - histogram for different weather station
+hist(datW$TAVE[datW$siteN == 2],
+     freq = FALSE,
+     main = paste(levels(datW$NAME)[2]),
+     xlab = "Average daily temperature (degrees C)",
+     ylab = "Relative frequency",
+     col = "grey75",
+     border = "white")
+curve(dnorm(x,
+      mean = mean(datW$TAVE[datW$siteN == 2], na.rm = TRUE),
+      sd = sd(datW$TAVE[datW$siteN == 2], na.rm = TRUE)),
+      add = TRUE, col = "red")
 
 
