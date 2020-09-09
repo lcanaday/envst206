@@ -71,7 +71,8 @@ hist(datW$TAVE[datW$siteN == 1],
      ylab = "Relative frequency",
      col = "grey75",
      border = "white")
-# look up hist funtion arguments
+
+# Q3 - look up hist funtion arguments
 help(hist)
 
 # Q4 - histogram for different weather station
