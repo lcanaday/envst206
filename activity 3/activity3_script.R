@@ -49,7 +49,7 @@ bartlett.test(datI$Richness ~ datI$urbanName)
 # boxplot of richness data by group to visualize data
 plot(datI$Richness ~ datI$urbanName, xlab = "Urban Environment Type", ylab = "Richness")
 
-# running anova test on insect data
+## Q6 - running anova test on insect data and assigning letters
 # specify model for species richness and urban type
 in.mod <- lm(datI$Richness ~ datI$urbanName)
 # run the ANOVA
@@ -63,8 +63,21 @@ tukeyT <- TukeyHSD(in.aov)
 tukeyT
 # plot Tukey HSD results
 # make axes labels smaller to fit
-plot(tukeyT, cex.axis = 0.75)
+plot(tukeyT, cex.axis = 0.5)
 
+## Q7 - calculate means across factor data
+tapply(datI$Richness, datI$urbanName, "mean")
 
+# chi-squared goodness of fit test
+# set up contingency table
+species <- matrix(c(18, 8, 15, 32), ncol = 2, byrow = TRUE)
+colnames(species) <- c("Not protected", "Protected")
+rownames(species) <- c("Declining", "Stable/Increasing")
+# mosaic plot
+mosaicplot(species, xlab = "Population Status", ylab = "Legal Protection", main = "Legal protection impacts on population")
 
+## Q8 - expected values under null
+mean(18, 8, 15, 32)
 
+## Q9 - chi-squared test
+chisq.test(species)
