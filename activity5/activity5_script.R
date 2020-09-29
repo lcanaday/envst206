@@ -18,6 +18,8 @@ precip <- aggregate(datW$PRCP, by=list(datW$NAME, datW$year), FUN="sum", na.rm=T
 colnames(precip) <- c("NAME", "year", "totalP")
 # add x column from aggregate for length of observations from each year
 precip$ncount <- aggregate(datP$PRCP, by=list(datP$NAME, datP$year), FUN="length")$x
+
+## Q1 - only years with >= 364 observations
 # new dataframe only years with >=364 observations
 pr <- precip[precip$ncount >=364, ]
 # look at only livermore and morrisville precip
@@ -53,7 +55,7 @@ legend("topleft",
        lwd = 1,
        bty = "n")
 
-## Q3 - plot mean annual max temp ny vs nd
+## Q3 and Q4 - plot mean annual max temp ny vs nd
 # dataframe with just max temp, year, site
 # remove missing
 datT <- na.omit(data.frame(NAME=datW$NAME,
@@ -90,3 +92,5 @@ legend("bottomright",
        pch = 19,
        lwd = 1,
        bty = "n")
+
+
