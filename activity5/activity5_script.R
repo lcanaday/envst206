@@ -93,4 +93,37 @@ legend("bottomright",
        lwd = 1,
        bty = "n")
 
+# install ggplot2 package
+install.packages("ggplot2")
+# load package into session
+library(ggplot2)
+
+## Q5 - example precip ggplot with updated colors
+#install color brewer package
+install.packages("RColorBrewer")
+# load package into session
+library(RColorBrewer)
+# see color options
+display.brewer.all()
+# example choose colors
+brewer.pal(5, "Set2")
+# plot
+ggplot(data = pr, aes(x = year, y = totalP, color = NAME))+
+  geom_point(alpha=0.75)+
+  geom_path(alpha=0.75)+
+  labs(x = "year", y = "Annual Precipitation")+
+  theme_classic()+
+  scale_color_manual(values = c("#66C2A5", "#FC8D62", "#8DA0CB", "#A6D854", "#E78AC3"))
+
+# violin plot minimum temps
+ggplot(data = datW, aes(x=NAME, y=TMIN))+
+  geom_violin(fill=rgb(0.933,0.953,0.98))+
+  geom_boxplot(width=0.2, size=0.25, fill="grey90")+
+  theme_classic()
+# daily patterns within year az 1974
+sub <- datW[datW$NAME == nameS[4] & datW$year == 1974,]
+
+## Q6 - indicate data/format as date
+sub$DATE <- as.Date(sub$DATE, "%Y-%m-%d")
+
 
