@@ -161,15 +161,9 @@ ggplot(data=sub.wa, aes(x=DATE, y=PRCP))+
 tmin <- datW[datW$NAME == nameS[1] & datW$year >= 2000,]
 # indicate data as date
 tmin$DATE <- as.Date(tmin$DATE, "%Y-%m-%d")
-# violin plot, daily min temp by year aberdeen
-ggplot(data=tmin, aes(x=year, y=TMIN, group=year))+
-  geom_violin(fill=rgb(0.933,0.953,0.98))+
-  geom_boxplot(width=0.2, size=0.25, fill="grey90")+
-  theme_classic()+
-  labs(title=nameS[1], x="Year", y="Minimum temperature (C)")
 # scatterplot, daily min temp by year aberdeen
 ggplot(data=tmin, aes(x=DATE, y=TMIN))+
-  geom_point()+
-  geom_path()+
+  geom_point(size=0.5)+
+  geom_path(size=0.5, alpha=0.5)+
   theme_classic()+
   labs(title=nameS[1], x="year", y="Minimum temperature (C)")
