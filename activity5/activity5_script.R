@@ -126,4 +126,50 @@ sub <- datW[datW$NAME == nameS[4] & datW$year == 1974,]
 ## Q6 - indicate data/format as date
 sub$DATE <- as.Date(sub$DATE, "%Y-%m-%d")
 
+## Q7 - plots for mormon az 1974
+# example plot with dates
+ggplot(data=sub, aes(x=DATE, y=TMAX))+
+  geom_point()+
+  geom_path()+
+  theme_classic()+
+  labs(x="year", y="Maximum temperature (C)")
+# example plot for precip
+ggplot(data=sub, aes(x=DATE, y=PRCP))+
+  geom_col(fill="royalblue3")+
+  theme_classic()+
+  labs(x="year", y="Daily precipitation (mm)")
 
+## Q8 - plots to compare to Q7
+# daily patterns within year for aberdeen wa 1974
+sub.wa <- datW[datW$NAME == nameS[1] & datW$year == 1974,]
+# indicate data as date
+sub.wa$DATE <- as.Date(sub.wa$DATE, "%Y-%m-%d")
+# max temp plot aberdeen
+ggplot(data=sub.wa, aes(x=DATE, y=TMAX))+
+  geom_point()+
+  geom_path()+
+  theme_classic()+
+  labs(title=nameS[1], x="year", y="Maximum temperature (C)")
+# precip plot for aberdeen
+ggplot(data=sub.wa, aes(x=DATE, y=PRCP))+
+  geom_col(fill="royalblue3")+
+  theme_classic()+
+  labs(title=nameS[1], x="year", y="Daily precipitation (mm)")
+
+## Q9 - daily min temps since 2000
+# get min temp data for one site since 2000
+tmin <- datW[datW$NAME == nameS[1] & datW$year >= 2000,]
+# indicate data as date
+tmin$DATE <- as.Date(tmin$DATE, "%Y-%m-%d")
+# violin plot, daily min temp by year aberdeen
+ggplot(data=tmin, aes(x=year, y=TMIN, group=year))+
+  geom_violin(fill=rgb(0.933,0.953,0.98))+
+  geom_boxplot(width=0.2, size=0.25, fill="grey90")+
+  theme_classic()+
+  labs(title=nameS[1], x="Year", y="Minimum temperature (C)")
+# scatterplot, daily min temp by year aberdeen
+ggplot(data=tmin, aes(x=DATE, y=TMIN))+
+  geom_point()+
+  geom_path()+
+  theme_classic()+
+  labs(title=nameS[1], x="year", y="Minimum temperature (C)")
