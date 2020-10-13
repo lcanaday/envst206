@@ -33,3 +33,14 @@ g2015@data$GLACNAME <- ifelse(g2015@data$GLACNAME == "North Swiftcurrent Glacier
                               ifelse(g2015@data$GLACNAME == "Miche Wabun",
                                      "Miche Wabun Glacier",
                                      as.character(g2015@data$GLACNAME)))
+
+## Q2,3,4 - looking at glacier data with satellite imagery
+
+## Q5 - gAll output
+# combine area, smaller data frame
+gdf66 <- data.frame(GLACNAME = g1966@data$GLACNAME,
+                   area66 = g1966@data$Area1966)
+gdf15 <- data.frame(GLACNAME = g2015@data$GLACNAME,
+                    area15 = g2015@data$Area2015)
+# join all data tables by glacier name
+gAll <- full_join(gdf66, gdf15, by = "GLACNAME")
