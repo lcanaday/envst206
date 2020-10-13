@@ -47,8 +47,18 @@ gAll <- full_join(gdf66, gdf15, by = "GLACNAME")
 
 ## Q7 - percent change plot
 # calculate % change in area from 1966 to 2015
-gAll$diff <- ((gAll$area66-gAll$area15)/gAll$area66)*100
+gAll$gdiff <- ((gAll$area66-gAll$area15)/gAll$area66)*100
 # plot area66 vs diff
-plot(gAll$area66, gAll$diff,
+plot(gAll$area66, gAll$gdiff,
      xlab = "Glacier Area 1966 (m^2)",
      ylab = "Percent Change 1966 to 2015")
+
+# join data with spatial data table and overwrite into spatial data table
+g1966@data <- left_join(g1966@data, gAll, by = "GLACNAME")
+# spplot to shade polygons based on % change
+spplot(g1966, "gdiff", main = "% change in area", col = "transparent")
+
+# subset spatial data
+# look at vulture glacier in 1966
+vulture66 <- g1966[g1966@data$GLACNAME == "Vulture Glacier", ]
+plot(vulture66, main = "Vulture Glacier in 1966", col = "slategray")
