@@ -33,5 +33,3 @@ g2015@data$GLACNAME <- ifelse(g2015@data$GLACNAME == "North Swiftcurrent Glacier
                               ifelse(g2015@data$GLACNAME == "Miche Wabun",
                                      "Miche Wabun Glacier",
                                      as.character(g2015@data$GLACNAME)))
-
-
