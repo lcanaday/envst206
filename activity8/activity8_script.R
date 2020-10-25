@@ -35,3 +35,36 @@ rgbS@nrows*rgbS@ncols
 allS <- stack(rdatB8, rdatB4, rdatB3, rdatB2)/10000
 # plot false color image
 plotRGB(allS, stretch="lin", maxpixels=allS@nrows*allS@ncols)
+
+## Q5 - NDVI
+# calculate NDVI
+# NIR-red/(NIR + red)
+NDVI <- (rdatB8 - rdatB4)/(rdatB8 + rdatB4)
+# visualize NDVI
+plot(NDVI)
+
+# read in landcover points data
+algae <- readOGR(paste0(dirR,"/Oneida/algae.shp"), verbose=FALSE)
+agri <- readOGR(paste0(dirR,"/Oneida/agriculture.shp"), verbose=FALSE)
+forest <- readOGR(paste0(dirR,"/Oneida/forest.shp"), verbose=FALSE)
+water <- readOGR(paste0(dirR,"/Oneida/water.shp"), verbose=FALSE)
+wetlands <- readOGR(paste0(dirR,"/Oneida/wetlands.shp"), verbose=FALSE)
+
+# plot points and true color
+plotRGB(rgbS, stretch="lin", maxpixels=2297430)
+plot(algae, add=TRUE, col=rgb(0.5,0.5,0.5,0.5), pch=19)
+plot(agri, add=TRUE, col=rgb(0.75,0.5,0.5,0.5), pch=19)
+plot(forest, add=TRUE, col=rgb(0.75,0.75,0.25,0.5), pch=19)
+plot(water, add=TRUE, col=rgb(0.33,0.75,0.75,0.5), pch=19)
+plot(wetlands, add=TRUE, col=rgb(0.33,0.33,0.65,0.5), pch=19)
+legend("bottomleft", c("algae", "agri", "forest", "water", "wetlands"),
+       pch=19, col=c(rgb(0.5,0.5,0.5,0.5),rgb(0.75,0.5,0.5,0.5),col=rgb(0.75,0.75,0.25,0.5),
+                     rgb(0.33,0.75,0.75,0.5),col=rgb(0.33,0.33,0.65,0.5)),
+       bty="n", cex=0.75)
+
+## Q6 - extracting coordinate data
+# set up dataframe with all point coordinates
+landExtract <- data.frame(landcID = as.factor(rep(c("algae","water", "agri", "forest", "wetlands"), each=120)),
+                          x=c(algae@coords[,1],water@coords[,1],agri@coords[,1],forest@coords[,1],wetlands@coords[,1]),
+                          y=c(algae@coords[,2],water@coords[,2],agri@coords[,2],forest@coords[,2],wetlands@coords[,2]))
+
