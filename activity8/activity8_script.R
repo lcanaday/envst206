@@ -98,3 +98,18 @@ ggplot(data=rasterEx, aes(x=B03, y=B08, color=landcID))+
 ggplot(data=rasterEx, aes(x=B04, y=B08, color=landcID))+
   geom_point(alpha=0.6)+
   theme_classic()
+
+## Q8 - extract values for landcover points, violin/boxplot
+# extract values
+ndviExtract <- raster::extract(NDVI, landExtract[2:3])
+ndviEX <- cbind(landExtract,ndviExtract)
+colnames(ndviEX) <- c("Landcover", "x", "y", "NDVI")
+# violin boxplot of NDVI within agri, forest, wetlands
+ggplot(data = ndviEX[ndviEX$Landcover == c("agri","forest","wetlands"), ], aes(x=Landcover, y=NDVI))+
+  geom_violin(fill=rgb(0.933,0.953,0.98))+
+  geom_boxplot(width=0.2, size=0.25, fill="grey90")+
+  theme_classic()
+
+## Q9 - does NDVI differ between groups
+
+
