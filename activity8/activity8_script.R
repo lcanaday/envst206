@@ -68,3 +68,33 @@ landExtract <- data.frame(landcID = as.factor(rep(c("algae","water", "agri", "fo
                           x=c(algae@coords[,1],water@coords[,1],agri@coords[,1],forest@coords[,1],wetlands@coords[,1]),
                           y=c(algae@coords[,2],water@coords[,2],agri@coords[,2],forest@coords[,2],wetlands@coords[,2]))
 
+# stack all bands
+allbands <- stack(rdatB2, rdatB3, rdatB4, rdatB8)/10000
+# add raster reflectance values to point coordinates
+# extract(raster, matrix of coordinates)
+ExtractOut <- raster::extract(allbands, landExtract[2:3])
+# name the bands
+colnames(ExtractOut) <- c("B02", "B03", "B04", "B08")
+# combine original data with coordinates with the raster data
+rasterEx <- cbind(landExtract,ExtractOut)
+#look at data
+head(rasterEx)
+
+# scatterplot of reflectance B02 vs B03
+ggplot(data=rasterEx, aes(x=B02, y=B03, color=landcID))+
+  geom_point(alpha=0.6)+
+  theme_classic()
+
+## Q7 - plots for each band vs NIR
+# B02 vs NIR
+ggplot(data=rasterEx, aes(x=B02, y=B08, color=landcID))+
+  geom_point(alpha=0.6)+
+  theme_classic()
+# B03 vs NIR
+ggplot(data=rasterEx, aes(x=B03, y=B08, color=landcID))+
+  geom_point(alpha=0.6)+
+  theme_classic()
+# B04 vs NIR
+ggplot(data=rasterEx, aes(x=B04, y=B08, color=landcID))+
+  geom_point(alpha=0.6)+
+  theme_classic()
