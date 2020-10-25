@@ -111,5 +111,17 @@ ggplot(data = ndviEX[ndviEX$Landcover == c("agri","forest","wetlands"), ], aes(x
   theme_classic()
 
 ## Q9 - does NDVI differ between groups
-
-
+# anova for agri forest and wetlands
+# specify model for ndvi and landcover type
+difmod <- lm(ndviEX$NDVI[ndviEX$Landcover == c("agri", "forest", "wetlands")] ~ ndviEX$Landcover[ndviEX$Landcover == c("agri", "forest", "wetlands")])
+# run the anova
+afw.aov <- aov(difmod)
+# print anova table
+summary(afw.aov)
+# posthoc test to verify differences
+# run Tukey HSD
+tukeyAFW <- TukeyHSD(afw.aov)
+# view results
+tukeyAFW
+# plot tukey results
+plot(tukeyAFW)
