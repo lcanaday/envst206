@@ -58,3 +58,30 @@ sampleSamp <- sample(seq(1,120),60)
 # convert these random samples from training to validation
 sampleType[sampleSamp] <- "valid"
 
+# set up table with coordinates and data type (validate or train) for each point
+landExtract <- data.frame(landcID = rep(seq(1,6),each=120),
+                          x=c(algae@coords[,1],water@coords[,1],agri@coords[,1],built@coords[,1],forest@coords[,1],wetlands@coords[,1]),
+                          y=c(algae@coords[,2],water@coords[,2],agri@coords[,2],built@coords[,2],forest@coords[,2],wetlands@coords[,2]))
+# add sample type
+landExtract$sampleType <- rep(sampleType, times=6)
+
+# create id table that gives each landcover an ID
+landclass <- data.frame(landcID = seq(1,6),
+                        landcover = c("algal bloom", "open water", "agriculture", "built", "forest", "wetlands"))
+
+# extract raster data at each point
+rasterEx <- data.frame(extract(allbandsCloudf,landExtract[,2:3]))
+# give names of bands
+colnames(rasterEx) <- c("B2", "B3","B4","B5","B6","B7","B8","B11","B12")
+
+# combine point information with raster information
+dataAll <- cbind(landExtract,rasterEx)
+# preview
+head(dataAll)
+
+# remove missing data
+dataAlln <- na.omit(dataAll)
+
+# subset into two different dataframes
+trainD <- dataAlln[dataAlln$sampleType == "train",]
+validD <- dataAlln[dataAlln$sampleType == "valid",]
