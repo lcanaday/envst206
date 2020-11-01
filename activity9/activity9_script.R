@@ -33,3 +33,28 @@ forest <- readOGR(paste0(dirR,"/Oneida/forest.shp"), verbose=FALSE)
 water <- readOGR(paste0(dirR,"/Oneida/water.shp"), verbose=FALSE)
 wetlands <- readOGR(paste0(dirR,"/Oneida/wetlands.shp"), verbose=FALSE)
 
+# create function called clouds F
+cloudsF <- function(rast){ifelse(rast > 60,NA,1)}
+CloudFlag <- calc(allbands[[10]], cloudsF)
+
+# multiply all bands by cloudflag raster
+allbandsCloud <- list()
+for(i in 1:9){allbandsCloud[[i]] <- CloudFlag*allbands[[i]]}
+# new stack
+allbandsCloudf <- stack(allbandsCloud[[1]],allbandsCloud[[2]],allbandsCloud[[3]],allbandsCloud[[4]],allbandsCloud[[5]],allbandsCloud[[6]],allbandsCloud[[7]],allbandsCloud[[8]],allbandsCloud[[9]])
+# sample plot one band
+plot(allbandsCloudf[[1]])
+
+# randomly choose 60 elements in the vector with set seed
+set.seed(12153)
+sample(seq(1,120),60)
+
+# set seed
+set.seed(12153)
+# randomly select the data in each set to be used
+sampleType <- rep("train", 120)
+# samples to randomly convert to validation data
+sampleSamp <- sample(seq(1,120),60)
+# convert these random samples from training to validation
+sampleType[sampleSamp] <- "valid"
+
