@@ -2,11 +2,13 @@
 
 # install and load in packages
 # install.packages(c("caret", "randomForest"))
+# install.packages("e1071")
 library(raster)
 library(sp)
 library(rgdal)
 library(caret)
 library(randomForest)
+library(e1071)
 
 # set up directory for oneida data folder
 dirR <- "/Users/lindsaycanaday/Documents/a08/oneida"
@@ -85,3 +87,51 @@ dataAlln <- na.omit(dataAll)
 # subset into two different dataframes
 trainD <- dataAlln[dataAlln$sampleType == "train",]
 validD <- dataAlln[dataAlln$sampleType == "valid",]
+
+# Kfold cross validation
+tc <- trainControl(method = "repeatedcv", number = 10, repeats = 10)
+
+# random forests
+rf.grid <- expand.grid(mtry=1:sqrt(9))
+
+# train the random forest model to the sentinel-2 data
+rf_model <- caret::train(x = trainD[,c(5:13)],
+                         y = as.factor(trainD$landcID),
+                         medthod = "rf",
+                         metric = "Accuracy",
+                         trainControl = tc,
+                         tuneGrid = rf.grid)
+# check output
+rf_model
+
+# change name in raster stack to match training data
+names(allbandsCloudf) <- c("B2","B3","B4","B5","B6","B7","B8","B11","B12")
+# apply random forest model to the sentinel-2 data
+rf_prediction <- raster::predict(allbandsCloudf, model = rf_model)
+# view predictions
+plot(rf_prediction)
+
+# landcover class names
+landclass
+# set up categorical colors
+landclass$cols <- c("#a6d854","#8da0cb","#66c2a5","#fc8d62","#ffffb3","#ffd92f")
+# make plot and hide legend
+plot(rf_prediction,
+     breaks=seq(0,6),
+     col=landclass$cols,
+     legend = FALSE, axes = FALSE)
+legend("bottomleft", paste(landclass$landcover),
+       fill=landclass$cols, bty = "n", horiz=TRUE)
+
+# get validation data from raster by extracting
+rf_Eval <- extract(rf_prediction, validD[,2:3])
+
+# make the confusion matrix
+rf_errorM <- confusionMatrix(as.factor(rf_Eval),as.factor(validD$landcID))
+# add landcover names
+colnames(rf_errorM$table) <- landclass$landcover
+rownames(rf_errorM$table) <- landclass$landcover
+# view the matrix
+rf_errorM$table
+# look at the overall accuracy
+rf_errorM$overall
