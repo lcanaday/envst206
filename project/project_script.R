@@ -75,7 +75,7 @@ areadiff <- na.omit(areadiff)
 # max decrease in area
 areadiff$year[areadiff$difference == min(areadiff$difference)]
 # plot between single year max decrease
-plot(seaice[seaice$year == 2006,], col="slategray", main="Maximum Single Year Decrease in Sea
-     Ice Extent Between 1979 and 2019")
+plot(seaice[seaice$year == 2006,], col="slategray", main="Greatest Single Year Decrease in Absolute
+Sea Ice Extent Between 1979 and 2019")
 plot(seaice[seaice$year == 2007,], col="tomato3", add=TRUE)
-
+# make plot of greatest single year percent loss in sea ice extent
