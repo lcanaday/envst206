@@ -6,11 +6,13 @@ library(rgdal)
 library(dplyr)
 # install.packages("rgeos")
 library(rgeos)
+# install.packages("Kendall")
+library(Kendall)
 
 # read in data
 seaice <- readOGR("/Users/lindsaycanaday/Documents/sea_ice_all/sea_ice_all.shp")
 
-# calculate area of sea ice extent for year
+# calculate area of sea ice extent for each year
 area <- c(gArea(seaice[seaice@data$year == 1979,]),gArea(seaice[seaice@data$year == 1980,]),
           gArea(seaice[seaice@data$year == 1981,]),gArea(seaice[seaice@data$year == 1982,]),
           gArea(seaice[seaice@data$year == 1983,]),gArea(seaice[seaice@data$year == 1984,]),
@@ -42,4 +44,25 @@ year <- c(1979,1980,1981,1982,1983,1984,
            2015,2016,2017,2018,2019)
 # create table of year and area
 yeararea <- data.frame(year,area)
-plot(yeararea)
+
+# plot year vs area
+plot(yeararea, main = "Area of Sea Ice Extent from 1979 to 2019",
+     xlab = "Year", ylab = "Area (m^2)")
+abline(lm(yeararea$area ~ yeararea$year))
+
+# trend of area over time
+# Mann-Kendall test
+MannKendall(yeararea$area)
+
+# find years with max and min area
+# max
+yeararea$year[yeararea$area == max(yeararea$area)]
+# min
+yeararea$year[yeararea$area == min(yeararea$area)]
+# plot overlay of max and min area
+plot(seaice[seaice$year == 1996,], col="slategrey", main = "Greatest Difference in Sea Ice Extent
+     Between 1979 and 2019")
+plot(seaice[seaice$year == 2012,], col="tomato3", add=TRUE)
+legend("bottomright", c("1996", "2012"),
+       col = c("slategray","tomato3"),
+       pch = 19, bty = "n")
