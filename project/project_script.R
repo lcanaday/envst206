@@ -68,4 +68,14 @@ legend("bottomright", c("1996", "2012"),
        pch = 19, bty = "n")
 
 # table with lagged differences
-areadiff <- data.frame(year,area,c(NA,diff(area, lag=1)))
+areadiff <- data.frame(year,c(NA,diff(area, lag=1)))
+colnames(areadiff) <- c("year", "difference")
+areadiff <- na.omit(areadiff)
+# find year with max decrease in area
+# max decrease in area
+areadiff$year[areadiff$difference == min(areadiff$difference)]
+# plot between single year max decrease
+plot(seaice[seaice$year == 2006,], col="slategray", main="Maximum Single Year Decrease in Sea
+     Ice Extent Between 1979 and 2019")
+plot(seaice[seaice$year == 2007,], col="tomato3", add=TRUE)
+
