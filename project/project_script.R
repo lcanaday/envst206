@@ -42,5 +42,4 @@ year <- c(1979,1980,1981,1982,1983,1984,
            2015,2016,2017,2018,2019)
 # create table of year and area
 yeararea <- data.frame(year,area)
-
 plot(yeararea)
