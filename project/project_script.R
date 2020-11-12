@@ -66,3 +66,6 @@ plot(seaice[seaice$year == 2012,], col="tomato3", add=TRUE)
 legend("bottomright", c("1996", "2012"),
        col = c("slategray","tomato3"),
        pch = 19, bty = "n")
+
+# table with lagged differences
+areadiff <- data.frame(year,area,c(NA,diff(area, lag=1)))
