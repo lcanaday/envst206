@@ -1,4 +1,4 @@
-# Project Script
+# Final Project Script
 
 # load in packages
 library(sp)
@@ -45,9 +45,10 @@ year <- c(1979,1980,1981,1982,1983,1984,
 # create table of year and area
 yeararea <- data.frame(year,area)
 
-# plot year vs area
+# scatter plot of year vs area
 plot(yeararea, main = "Area of Sea Ice Extent from 1979 to 2019",
      xlab = "Year", ylab = "Area (m^2)", pch=19, col="slategray")
+# add linear trendline
 abline(lm(yeararea$area ~ yeararea$year))
 
 # trend of area over time
@@ -55,11 +56,11 @@ abline(lm(yeararea$area ~ yeararea$year))
 MannKendall(yeararea$area)
 
 # find years with max and min area
-# max
+# year with max area
 yeararea$year[yeararea$area == max(yeararea$area)]
-# min
+# year with min area
 yeararea$year[yeararea$area == min(yeararea$area)]
-# plot overlay of max and min area
+# plot overlay map of years with max and min area
 plot(seaice[seaice$year == 1996,], col="slategrey", main = "Greatest and Smallest Sea Ice Extent
      Between 1979 and 2019")
 plot(seaice[seaice$year == 2012,], col="tomato3", add=TRUE)
@@ -67,11 +68,11 @@ legend("bottomright", c("1996", "2012"),
        col = c("slategray","tomato3"),
        pch = 19, bty = "n")
 
-# table with lagged differences
+# table with lagged differences in absolute area
 areadiff <- data.frame(year,c(NA,diff(area, lag=1)))
 colnames(areadiff) <- c("year", "difference")
 areadiff <- na.omit(areadiff)
-# add percent differences to table
+# add percent differences in area to table
 perdiff <- (areadiff/area[1:40])*100
 colnames(perdiff) <- c("abchange","perchange")
 areadiff$perchange <- perdiff$perchange
@@ -79,7 +80,7 @@ areadiff$perchange <- perdiff$perchange
 areadiff$year[areadiff$difference == min(areadiff$difference)]
 # find year with max percent decrease in area
 areadiff$year[areadiff$perchange == min(areadiff$perchange)]
-# plot between single year max decrease
+# plot overlay map of single year max decrease in area (absolute and percent)
 plot(seaice[seaice$year == 2006,], col="slategray", main="Greatest Single Year Decrease in Sea Ice
      Extent Between 1979 and 2019")
 plot(seaice[seaice$year == 2007,], col="tomato3", add=TRUE)
