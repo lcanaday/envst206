@@ -1,6 +1,6 @@
 # Project Script
 
-# load in packages for spatial data
+# load in packages
 library(sp)
 library(rgdal)
 library(dplyr)
@@ -60,7 +60,7 @@ yeararea$year[yeararea$area == max(yeararea$area)]
 # min
 yeararea$year[yeararea$area == min(yeararea$area)]
 # plot overlay of max and min area
-plot(seaice[seaice$year == 1996,], col="slategrey", main = "Greatest Difference in Sea Ice Extent
+plot(seaice[seaice$year == 1996,], col="slategrey", main = "Greatest and Smallest Sea Ice Extent
      Between 1979 and 2019")
 plot(seaice[seaice$year == 2012,], col="tomato3", add=TRUE)
 legend("bottomright", c("1996", "2012"),
@@ -78,4 +78,6 @@ areadiff$year[areadiff$difference == min(areadiff$difference)]
 plot(seaice[seaice$year == 2006,], col="slategray", main="Greatest Single Year Decrease in Absolute
 Sea Ice Extent Between 1979 and 2019")
 plot(seaice[seaice$year == 2007,], col="tomato3", add=TRUE)
-# make plot of greatest single year percent loss in sea ice extent
+legend("bottomright", c("2006","2007"),
+       col=c("slategray","tomato3"),
+       pch=19, bty="n")
