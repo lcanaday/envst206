@@ -47,7 +47,7 @@ yeararea <- data.frame(year,area)
 
 # plot year vs area
 plot(yeararea, main = "Area of Sea Ice Extent from 1979 to 2019",
-     xlab = "Year", ylab = "Area (m^2)")
+     xlab = "Year", ylab = "Area (m^2)", pch=19, col="slategray")
 abline(lm(yeararea$area ~ yeararea$year))
 
 # trend of area over time
