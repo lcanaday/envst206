@@ -47,7 +47,7 @@ yeararea <- data.frame(year,area)
 
 # scatter plot of year vs area
 plot(yeararea, main = "Area of Sea Ice Extent from 1979 to 2019",
-     xlab = "Year", ylab = "Area (m^2)", pch=19, col="slategray")
+     xlab = "Year", ylab = "Area (km^2)", pch=19, col="slategray")
 # add linear trendline
 abline(lm(yeararea$area ~ yeararea$year))
 
